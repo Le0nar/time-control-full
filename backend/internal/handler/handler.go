@@ -2,11 +2,19 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/le0nar/time-control/internal/company"
 	"github.com/le0nar/time-control/internal/service"
 )
 
 type Handler struct {
-	services *service.Service
+	// TODO: mb use private literation for "CompanyHandler"
+	CompanyHandler company.CompanyHandler
+}
+
+func NewHandler(services *service.Service) *Handler {
+	return &Handler{
+		CompanyHandler: *company.NewCompanyHandler(services.CompanyService),
+	}
 }
 
 func (h *Handler) InitRouter() *gin.Engine {
@@ -14,10 +22,10 @@ func (h *Handler) InitRouter() *gin.Engine {
 	
 	auth := router.Group("/auth")  
 	{
-		auth.POST("/company/sign-in")
+		// auth.POST("/company/sign-in", )
 		// auth.POST("/employee/sign-in")
 
-		auth.POST("/company/sign-up")
+		auth.POST("/company/sign-up", h.CompanyHandler.SignUp)
 		// auth.POST("/employee/sign-up")
 	}
 
@@ -26,6 +34,3 @@ func (h *Handler) InitRouter() *gin.Engine {
 	return router
 }
 
-func NewHandler(services *service.Service) *Handler {
-	return &Handler{services: services}
-}

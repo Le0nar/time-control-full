@@ -1,8 +1,7 @@
 package util
 
 import (
-	"log"
-
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
@@ -12,6 +11,6 @@ func InitConfig() {
 	 
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("error initializing configs: %s", err.Error())
+		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
 }

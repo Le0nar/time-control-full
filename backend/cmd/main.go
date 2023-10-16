@@ -1,16 +1,16 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/joho/godotenv"
-	database "github.com/le0nar/time-control/db"
+	database "github.com/le0nar/time-control/database"
 	"github.com/le0nar/time-control/internal/handler"
 	"github.com/le0nar/time-control/internal/repository"
 	"github.com/le0nar/time-control/internal/service"
 	"github.com/le0nar/time-control/util"
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
@@ -18,7 +18,7 @@ func main() {
 	util.InitConfig()
 
 	if err := godotenv.Load(); err != nil {
-		log.Fatalf("error loading env variables: %s", err.Error())
+		logrus.Fatalf("error loading env variables: %s", err.Error())
 	}
 
 	db, err := database.NewPostgresDB(database.Config{
@@ -31,7 +31,7 @@ func main() {
 	})
 
 	if err != nil {
-		log.Fatalf("failed to initialize db: %s", err.Error())
+		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
 
 	repos := repository.NewRepository(db)
@@ -40,5 +40,7 @@ func main() {
 
 	port := viper.GetString("port")
 	router :=  handler.InitRouter()
+
+	// TODO: move router.Run to goroutine
 	router.Run("localhost:" + port)
 }

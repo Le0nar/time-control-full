@@ -1,13 +1,17 @@
 package repository
 
-import "github.com/jmoiron/sqlx"
+import (
+	"github.com/jmoiron/sqlx"
+	"github.com/le0nar/time-control/internal/company"
+)
 
 type Repository struct {
-
+	CompanyRepository company.CompanyRepository
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
-
+		// TODO: do i need "*" here?
+		CompanyRepository: *company.NewCompanyRepository(db),
 	}
 }
