@@ -17,8 +17,8 @@ func NewCompanyRepository(db *sqlx.DB) *CompanyRepository {
 // TODO: mb move table name somewhere
 const companiesTable = "companies"
 
-func (r *CompanyRepository) CreateCompany(createCompanyDto CreateCompanyDto) (CompanyDto, error) {
-	var company CompanyDto
+func (r *CompanyRepository) CreateCompany(createCompanyDto CreateCompanyDto) (Company, error) {
+	var company Company
 	
 	query := fmt.Sprintf("INSERT INTO %s (email, name, password_hash) values ($1, $2, $3) RETURNING  id, email, name", companiesTable)
 

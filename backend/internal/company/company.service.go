@@ -15,7 +15,7 @@ func NewCompanyService(companyRepository CompanyRepository) *CompanyService {
 }
 
 
-func (s *CompanyService) CreateCompany(createCompanyDto CreateCompanyDto) (CompanyDto, error) {
+func (s *CompanyService) CreateCompany(createCompanyDto CreateCompanyDto) (Company, error) {
 	createCompanyDto.Password = generatePasswordHash(createCompanyDto.Password)
 	return s.companyRepository.CreateCompany(createCompanyDto)
 }

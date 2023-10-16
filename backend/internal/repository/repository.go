@@ -11,7 +11,6 @@ type Repository struct {
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
-		// TODO: do i need "*" here?
 		CompanyRepository: *company.NewCompanyRepository(db),
 	}
 }
