@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/le0nar/time-control/internal/company"
+	"github.com/le0nar/time-control/internal/modules/company"
 	"github.com/le0nar/time-control/internal/repository"
 )
 

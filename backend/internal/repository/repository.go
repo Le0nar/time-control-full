@@ -2,7 +2,7 @@ package repository
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/le0nar/time-control/internal/company"
+	"github.com/le0nar/time-control/internal/modules/company"
 )
 
 type Repository struct {

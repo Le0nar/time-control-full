@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/le0nar/time-control/internal/company"
+	"github.com/le0nar/time-control/internal/modules/company"
 	"github.com/le0nar/time-control/internal/service"
 )
 
