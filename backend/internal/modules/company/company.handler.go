@@ -12,7 +12,6 @@ type CompanyHandler struct {
 }
 
 func NewCompanyHandler(companyService CompanyService) *CompanyHandler {
-	// TODO: mb refactor to return &CompanyHandler{companyService}
 	return &CompanyHandler{companyService: companyService}
 }
 

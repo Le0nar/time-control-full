@@ -1,6 +1,8 @@
 package employee
 
 import (
+	"fmt"
+
 	"github.com/jmoiron/sqlx"
 )
 
@@ -8,23 +10,48 @@ type EmployeeRepository struct {
 	db *sqlx.DB
 }
 
+func NewEmployeeRepository(db *sqlx.DB) *EmployeeRepository {
+	return &EmployeeRepository{db: db}
+}
+
+
 // TODO: mb move table name somewhere
 const employeesTable = "employees"
 
 func (r *EmployeeRepository) CreateEmployee(createEmployeeDto CreateEmployeeDto) (Employee, error) {
 	var employee Employee
-	
- 	// TODO: set new employee to DB
 
-	// query := fmt.Sprintf(
-	// 	"INSERT INTO %s (email, name, password_hash) values ($1, $2, $3) RETURNING  id, email, name",
-	// 	employeesTable,
-	// )
+	const insertedFields  = "email, password_hash, first_name, second_name, patronymic, company_id"
+	const returnedFields = "email, id, first_name, second_name, patronymic, company_id"
 
-	// row := r.db.QueryRow(query, createEmployeeDto.Email, createEmployeeDto.Name, createEmployeeDto.Password)
-	// if err := row.Scan(&employee.Id, &employee.Email, &employee.Name); err != nil {
-	// 	return employee, err
-	// }
+	query := fmt.Sprintf(
+		"INSERT INTO %s (%s)  values ($1, $2, $3, $4, $5, $6) RETURNING  %s",
+		employeesTable,
+		insertedFields,
+		returnedFields,
+	)
+
+	row := r.db.QueryRow(
+		query,
+		createEmployeeDto.Email,
+		createEmployeeDto.Password,
+		createEmployeeDto.FirstName,
+		createEmployeeDto.SecondName,
+		createEmployeeDto.Patronymic,
+		createEmployeeDto.CompanyId,
+	)
+
+	err := row.Scan(
+		&employee.Email,
+		&employee.Id,
+		&employee.FirstName,
+		&employee.SecondName,
+		&employee.Patronymic,
+		&employee.CompanyId,
+	)
+	if err != nil {
+		return employee, err
+	}
 
 	return employee, nil
 }
