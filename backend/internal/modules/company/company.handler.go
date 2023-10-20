@@ -37,6 +37,7 @@ func (h *CompanyHandler) SignIn(c *gin.Context) {
 
 	if err := c.BindJSON(&signInCompanyDto); err != nil {
 		util.NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
 	}
 	
 	token, err := h.companyService.GenerateCompanyToken(signInCompanyDto.Email, signInCompanyDto.Password)
