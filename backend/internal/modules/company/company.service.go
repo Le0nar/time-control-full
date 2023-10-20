@@ -23,13 +23,13 @@ func (s *CompanyService) CreateCompany(createCompanyDto CreateCompanyDto) (Compa
 
 type companyTokenClaims struct {
 	jwt.StandardClaims
-	CompanyId int `json:"user_id"`
+	CompanyId int `json:"company_id"`
 }
 
 // TODO: mb move to constants file
 const tokenTTL = 12 * time.Hour
 
-func (s *CompanyService) GenerateCompanyToken(email, password string) (string, error) {
+func (s *CompanyService) GenerateCompanyToken(email, password string, ) (string, error) {
 	company, err := s.companyRepository.GetCompany(email, util.GeneratePasswordHash(password))
 	if err != nil {
 		return "", err

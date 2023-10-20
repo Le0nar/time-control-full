@@ -14,7 +14,6 @@ func NewCompanyRepository(db *sqlx.DB) *CompanyRepository {
 	return &CompanyRepository{db: db}
 }
 
-// TODO: mb move table name somewhere
 const companiesTable = "companies"
 
 func (r *CompanyRepository) CreateCompany(createCompanyDto CreateCompanyDto) (Company, error) {

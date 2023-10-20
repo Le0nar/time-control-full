@@ -29,7 +29,7 @@ func (h *Handler) InitRouter() *gin.Engine {
 		auth.POST("/company/sign-in", h.CompanyHandler.SignIn )
 
 		auth.POST("/employee/sign-up", h.EmployeeHandler.SignUp)
-		// auth.POST("/employee/sign-in")
+		auth.POST("/employee/sign-in", h.EmployeeHandler.SignIn)
 	}
 
 	// TODO: add api/company and api/employee endpointss

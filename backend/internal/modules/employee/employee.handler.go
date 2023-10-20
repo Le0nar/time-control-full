@@ -31,3 +31,22 @@ func (h *EmployeeHandler) SignUp(c *gin.Context) {
 
 	c.JSON(http.StatusOK, company)
 }
+
+func (h *EmployeeHandler) SignIn(c *gin.Context) {
+	var signInEmployeeDto SignInEmployeeDto
+
+	if err := c.BindJSON(&signInEmployeeDto); err != nil {
+		util.NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	
+	token, err := h.employeeService.GenerateEmployeeToken(signInEmployeeDto.Email, signInEmployeeDto.Password)
+	if err != nil {
+		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"token": token,
+	})
+}

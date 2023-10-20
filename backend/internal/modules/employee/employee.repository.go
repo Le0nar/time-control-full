@@ -15,7 +15,7 @@ func NewEmployeeRepository(db *sqlx.DB) *EmployeeRepository {
 }
 
 
-// TODO: mb move table name somewhere
+
 const employeesTable = "employees"
 
 func (r *EmployeeRepository) CreateEmployee(createEmployeeDto CreateEmployeeDto) (Employee, error) {
@@ -54,4 +54,16 @@ func (r *EmployeeRepository) CreateEmployee(createEmployeeDto CreateEmployeeDto)
 	}
 
 	return employee, nil
+}
+
+func (r *EmployeeRepository) GetEmployee(email, passwordHash string) (Employee, error) {
+	var employee Employee
+
+	query := fmt.Sprintf(
+		"SELECT id, email, first_name, first_name, patronymic, company_id FROM %s WHERE email=$1 and password_hash=$2",
+	 	employeesTable,
+	)
+	err := r.db.Get(&employee, query, email, passwordHash)
+
+	return employee, err
 }
