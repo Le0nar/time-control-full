@@ -25,7 +25,7 @@ func (h *Handler) InitRouter() *gin.Engine {
 		auth.POST("/company/sign-up", h.CompanyHandler.SignUp)
 		auth.POST("/company/sign-in", h.CompanyHandler.SignIn )
 
-		// auth.POST("/employee/sign-up")
+		auth.POST("/employee/sign-up")
 		// auth.POST("/employee/sign-in")
 	}
 

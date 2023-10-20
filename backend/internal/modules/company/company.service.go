@@ -1,12 +1,11 @@
 package company
 
 import (
-	"crypto/sha1"
-	"fmt"
 	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/le0nar/time-control/util"
 )
 
 type CompanyService struct {
@@ -18,7 +17,7 @@ func NewCompanyService(companyRepository CompanyRepository) *CompanyService {
 }
 
 func (s *CompanyService) CreateCompany(createCompanyDto CreateCompanyDto) (Company, error) {
-	createCompanyDto.Password = generatePasswordHash(createCompanyDto.Password)
+	createCompanyDto.Password = util.GeneratePasswordHash(createCompanyDto.Password)
 	return s.companyRepository.CreateCompany(createCompanyDto)
 }
 
@@ -31,7 +30,7 @@ type companyTokenClaims struct {
 const tokenTTL = 12 * time.Hour
 
 func (s *CompanyService) GenerateCompanyToken(email, password string) (string, error) {
-	company, err := s.companyRepository.GetCompany(email, generatePasswordHash(password))
+	company, err := s.companyRepository.GetCompany(email, util.GeneratePasswordHash(password))
 	if err != nil {
 		return "", err
 	}
@@ -46,12 +45,4 @@ func (s *CompanyService) GenerateCompanyToken(email, password string) (string, e
 	signingKey := os.Getenv("SIGNING_KEY")
 
 	return token.SignedString([]byte(signingKey))
-}
-
-func generatePasswordHash(password string) string {
-	hash := sha1.New()
-	hash.Write([]byte(password))
-	salt := os.Getenv("SALT")
-
-	return fmt.Sprintf("%x", hash.Sum([]byte(salt)))
 }
