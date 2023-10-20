@@ -8,7 +8,6 @@ import (
 func InitConfig() {
 	viper.AddConfigPath("configs")
 	viper.SetConfigName("config")
-	 
 
 	if err := viper.ReadInConfig(); err != nil {
 		logrus.Fatalf("error initializing configs: %s", err.Error())

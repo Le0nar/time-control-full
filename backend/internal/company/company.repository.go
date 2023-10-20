@@ -29,3 +29,12 @@ func (r *CompanyRepository) CreateCompany(createCompanyDto CreateCompanyDto) (Co
 
 	return company, nil
 }
+
+func (r *CompanyRepository) GetCompany(email, passwordHash string) (Company, error) {
+	var company Company
+
+	query := fmt.Sprintf("SELECT id, email, name FROM %s WHERE email=$1 and password_hash=$2", companiesTable)
+	err := r.db.Get(&company, query, email, passwordHash)
+
+	return company, err
+}
