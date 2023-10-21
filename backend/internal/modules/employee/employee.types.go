@@ -6,7 +6,7 @@ type Employee struct {
 	FirstName  string `json:"firstName" db:"first_name" binding:"required"`
 	SecondName string `json:"secondName" db:"second_name" binding:"required"`
 	Patronymic string `json:"patronymic"`
-	CompanyId  int    `json:"companyId" db:"company_id"`
+	CompanyId  int    `json:"companyId" db:"company_id" binding:"required"`
 }
 
 type CreateEmployeeDto struct {
@@ -15,7 +15,7 @@ type CreateEmployeeDto struct {
 	FirstName  string `json:"firstName" db:"first_name" binding:"required"`
 	SecondName string `json:"secondName" db:"second_name" binding:"required"`
 	Patronymic string `json:"patronymic"`
-	CompanyId  int    `json:"companyId" db:"company_id"`
+	CompanyId  int    `json:"companyId" db:"company_id" binding:"required"`
 }
 
 type SignInEmployeeDto struct {

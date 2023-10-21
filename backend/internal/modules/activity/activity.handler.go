@@ -30,9 +30,10 @@ func (h *ActivityHandler) CreateActivity(c *gin.Context) {
 	}
 
 	if activity.WasActive {
+		c.JSON(http.StatusCreated, "resource created successfully")
 		return
-		// return 201
 	}
 
-	// return 200 with json activity
+	// TODO: mb use another status code
+	c.JSON(http.StatusOK, activity)
 }
