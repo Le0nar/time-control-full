@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/le0nar/time-control/util"
+	"github.com/le0nar/time-control/internal/util"
 )
 
 type ActivityHandler struct {

@@ -3,7 +3,7 @@ package employee
 import (
 	"errors"
 
-	"github.com/le0nar/time-control/util"
+	"github.com/le0nar/time-control/internal/util"
 )
 
 type EmployeeService struct {

@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	database "github.com/le0nar/time-control/database"
 	"github.com/le0nar/time-control/internal/handler"
 	"github.com/le0nar/time-control/internal/repository"
 	"github.com/le0nar/time-control/internal/service"
@@ -20,7 +19,7 @@ func main() {
 		logrus.Fatalf("error loading env variables: %s", err.Error())
 	}
 
-	db, err := database.NewPostgresDB(database.Config{
+	db, err := repository.NewPostgresDB(repository.DatabaseConfig{
 		Host: viper.GetString("db.host"),
 		Port: viper.GetString("db.port"),
 		Username: viper.GetString("db.username"),

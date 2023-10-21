@@ -3,7 +3,7 @@ package company
 import (
 	"errors"
 
-	"github.com/le0nar/time-control/util"
+	"github.com/le0nar/time-control/internal/util"
 )
 
 type CompanyService struct {
