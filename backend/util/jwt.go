@@ -3,6 +3,7 @@ package util
 import (
 	"errors"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -50,4 +51,20 @@ func ParseToken(accessToken string) (int, string, error) {
 	}
 
 	return claims.Id,claims.Role, nil
+}
+
+func  GetTokenFromHeader(header string) (string, error) {
+	if header == "" {
+		return "", errors.New("empty auth header")
+	}
+
+	headerParts := strings.Split(header, " ")
+	if len(headerParts) != 2 {
+		return "", errors.New("invalid auth header")
+
+	}
+
+	token := headerParts[1]
+
+	return token, nil
 }

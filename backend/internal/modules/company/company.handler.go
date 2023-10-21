@@ -2,7 +2,6 @@ package company
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/le0nar/time-control/util"
@@ -58,20 +57,16 @@ const (
 
 func (h *CompanyHandler) IdentityCompany(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
-	if header == "" {
-		util.NewErrorResponse(c, http.StatusUnauthorized, "empty auth header")
-		return
-	}
-
-	headerParts := strings.Split(header, " ")
-	if len(headerParts) != 2 {
-		util.NewErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
-		return
-	}
-
-	companyId, err := h.companyService.GetCompanyId(headerParts[1]) 
+	token, err := util.GetTokenFromHeader(header)
 	if err != nil {
 		util.NewErrorResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	companyId, err := h.companyService.GetCompanyId(token) 
+	if err != nil {
+		util.NewErrorResponse(c, http.StatusUnauthorized, err.Error())
+		return
 	}
 	
 	c.Set(companyCtx, companyId)
