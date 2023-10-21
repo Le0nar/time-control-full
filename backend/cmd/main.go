@@ -8,14 +8,13 @@ import (
 	"github.com/le0nar/time-control/internal/handler"
 	"github.com/le0nar/time-control/internal/repository"
 	"github.com/le0nar/time-control/internal/service"
-	"github.com/le0nar/time-control/util"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
 func main() {
-	util.InitConfig()
+	initConfig()
 
 	if err := godotenv.Load(); err != nil {
 		logrus.Fatalf("error loading env variables: %s", err.Error())
@@ -43,4 +42,13 @@ func main() {
 
 	// TODO: move router.Run to goroutine
 	router.Run("localhost:" + port)
+}
+
+func initConfig() {
+	viper.AddConfigPath("configs")
+	viper.SetConfigName("config")
+
+	if err := viper.ReadInConfig(); err != nil {
+		logrus.Fatalf("error initializing configs: %s", err.Error())
+	}
 }
