@@ -2,6 +2,7 @@ package company
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/le0nar/time-control/util"
@@ -14,7 +15,6 @@ type CompanyHandler struct {
 func NewCompanyHandler(companyService CompanyService) *CompanyHandler {
 	return &CompanyHandler{companyService: companyService}
 }
-
 func (h *CompanyHandler) SignUp(c *gin.Context) {
 	var createCompanyDto CreateCompanyDto
 
@@ -40,8 +40,8 @@ func (h *CompanyHandler) SignIn(c *gin.Context) {
 		return
 	}
 	
-	token, err := h.companyService.GenerateCompanyToken(signInCompanyDto.Email, signInCompanyDto.Password)
-		if err != nil {
+	token, err := h.companyService.GetToken(signInCompanyDto.Email, signInCompanyDto.Password)
+	if err != nil {
 		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -49,4 +49,30 @@ func (h *CompanyHandler) SignIn(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"token": token,
 	})
+}
+
+const (
+	authorizationHeader = "Authorization"
+	companyCtx = "companyId"
+)
+
+func (h *CompanyHandler) IdentityCompany(c *gin.Context) {
+	header := c.GetHeader(authorizationHeader)
+	if header == "" {
+		util.NewErrorResponse(c, http.StatusUnauthorized, "empty auth header")
+		return
+	}
+
+	headerParts := strings.Split(header, " ")
+	if len(headerParts) != 2 {
+		util.NewErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
+		return
+	}
+
+	companyId, err := h.companyService.GetCompanyId(headerParts[1]) 
+	if err != nil {
+		util.NewErrorResponse(c, http.StatusUnauthorized, err.Error())
+	}
+	
+	c.Set(companyCtx, companyId)
 }

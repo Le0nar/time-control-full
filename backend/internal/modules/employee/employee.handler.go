@@ -41,7 +41,7 @@ func (h *EmployeeHandler) SignIn(c *gin.Context) {
 		return
 	}
 	
-	token, err := h.employeeService.GenerateEmployeeToken(signInEmployeeDto.Email, signInEmployeeDto.Password)
+	token, err := h.employeeService.GetToken(signInEmployeeDto.Email, signInEmployeeDto.Password)
 	if err != nil {
 		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -70,7 +70,7 @@ func (h *EmployeeHandler) IdentityEmployee(c *gin.Context) {
 		return
 	}
 
-	employeeId, err := h.employeeService.ParseToken(headerParts[1]) 
+	employeeId, err := h.employeeService.GetEmployeeId(headerParts[1]) 
 	if err != nil {
 		util.NewErrorResponse(c, http.StatusUnauthorized, err.Error())
 	}
