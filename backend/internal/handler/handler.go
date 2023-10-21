@@ -37,7 +37,7 @@ func (h *Handler) InitRouter() *gin.Engine {
 		auth.POST("/employee/sign-in", h.EmployeeHandler.SignIn)
 	}
 
-	employeeApi := router.Group("/employee-api")  
+	employeeApi := router.Group("/employee-api", h.EmployeeHandler.IdentityEmployee)  
 	{
 		employeeApi.POST("/activity", h.ActivityHandler.CreateActivity)
 		// TODO: make activity with id :id wasActive: true

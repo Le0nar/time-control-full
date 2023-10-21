@@ -2,6 +2,7 @@ package employee
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/le0nar/time-control/util"
@@ -49,4 +50,30 @@ func (h *EmployeeHandler) SignIn(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"token": token,
 	})
+}
+
+const (
+	authorizationHeader = "Authorization"
+	employeeCtx = "employeeId"
+)
+
+func (h *EmployeeHandler) IdentityEmployee(c *gin.Context) {
+	header := c.GetHeader(authorizationHeader)
+	if header == "" {
+		util.NewErrorResponse(c, http.StatusUnauthorized, "empty auth header")
+		return
+	}
+
+	headerParts := strings.Split(header, " ")
+	if len(headerParts) != 2 {
+		util.NewErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
+		return
+	}
+
+	employeeId, err := h.employeeService.ParseToken(headerParts[1]) 
+	if err != nil {
+		util.NewErrorResponse(c, http.StatusUnauthorized, err.Error())
+	}
+	
+	c.Set(employeeCtx, employeeId)
 }

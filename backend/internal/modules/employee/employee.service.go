@@ -1,6 +1,7 @@
 package employee
 
 import (
+	"errors"
 	"os"
 	"time"
 
@@ -45,4 +46,26 @@ func (s *EmployeeService) GenerateEmployeeToken(email, password string, ) (strin
 	signingKey := os.Getenv("SIGNING_KEY")
 
 	return token.SignedString([]byte(signingKey))
+}
+
+func (s *EmployeeService) ParseToken(accessToken string) (int, error) {
+	token, err := jwt.ParseWithClaims(accessToken, &employeeTokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("invalid signing method")
+		}
+
+		signingKey := os.Getenv("SIGNING_KEY")
+
+		return []byte(signingKey), nil
+	})
+	if err != nil {
+		return 0, err
+	}
+
+	claims, ok := token.Claims.(*employeeTokenClaims)
+	if !ok {
+		return 0, errors.New("token claims are not of type *employeeTokenClaims")
+	}
+
+	return claims.EmployeeId, nil
 }
