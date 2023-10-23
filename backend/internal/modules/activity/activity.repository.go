@@ -16,7 +16,7 @@ func NewActivityRepository(db *sqlx.DB) *ActivityRepository {
 	return &ActivityRepository{db: db}
 }
 
-const activitiesTable = "activities"
+const activityTable = "activity"
 
 // TODO: mb return *Activity
 func (r *ActivityRepository) CreateActivity(employeeId int, wasActive bool, checkDuration int64) (Activity, error) {
@@ -24,7 +24,7 @@ func (r *ActivityRepository) CreateActivity(employeeId int, wasActive bool, chec
 
 	query := fmt.Sprintf(
 		"INSERT INTO %s (id, was_active, check_duration, employee_id, check_time) values ($1, $2, $3, $4, $5) RETURNING  id, was_active, employee_id",
-		activitiesTable,
+		activityTable,
 	)
 
 	// TODO: mb create struct for Activity in Database
