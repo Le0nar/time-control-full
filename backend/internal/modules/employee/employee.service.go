@@ -33,6 +33,10 @@ func (s *EmployeeService) GetToken(email, password string) (string, error) {
 func (s *EmployeeService) GetEmployeeId(token string) (int, error) {
 	id, role, err := util.ParseToken(token)
 
+	if err != nil {
+		return id, err
+	}
+
 	if role != employeeRole {
 		return 0, errors.New("access for this role is denied")
 	}

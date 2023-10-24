@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/le0nar/time-control/internal/util"
 )
 
@@ -34,6 +35,23 @@ func (h *ActivityHandler) CreateActivity(c *gin.Context) {
 		return
 	}
 
-	// TODO: mb use another status code
 	c.JSON(http.StatusOK, activity)
+}
+
+func (h *ActivityHandler) ConfirmActivity(c *gin.Context) {
+	id := c.Param("id")
+
+	_, err := uuid.Parse(id)
+	if err != nil {
+		util.NewErrorResponse(c, http.StatusBadRequest, "invalid id param")
+		return
+	}
+
+	err = h.activityService.ConfirmActivity((id))
+	if err != nil {
+		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, "resource updated successfully")
 }

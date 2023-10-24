@@ -34,3 +34,7 @@ func checkHasInteractions(inactivityTime, checkDuration int64) bool {
 func checkIsFaceRecognized(photo os.File) bool {
     return rand.Intn(2) == 1
 }
+
+func (s *ActivityService) ConfirmActivity(id string) error {
+	return s.activityRepository.ConfirmActivity(id)
+}

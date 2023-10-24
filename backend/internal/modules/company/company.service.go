@@ -33,6 +33,10 @@ func (s *CompanyService) GetToken(email, password string) (string, error) {
 func (s *CompanyService) GetCompanyId(token string) (int, error) {
 	id, role, err := util.ParseToken(token)
 
+	if err != nil {
+		return id, err
+	}
+
 	if role != companyRole {
 		return 0, errors.New("access for this role is denied")
 	}

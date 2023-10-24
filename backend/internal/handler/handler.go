@@ -40,8 +40,7 @@ func (h *Handler) InitRouter() *gin.Engine {
 	employeeApi := router.Group("/employee-api", h.EmployeeHandler.IdentityEmployee)  
 	{
 		employeeApi.POST("/activity", h.ActivityHandler.CreateActivity)
-		// TODO: make activity with id :id wasActive: true
-		// employeeApi.PATCH("/activity/:id", h.updateNews)
+		employeeApi.PATCH("/activity/:id", h.ActivityHandler.ConfirmActivity)
 	}
 
 	return router

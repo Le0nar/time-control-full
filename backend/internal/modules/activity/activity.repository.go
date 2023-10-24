@@ -38,3 +38,11 @@ func (r *ActivityRepository) CreateActivity(employeeId int, wasActive bool, chec
 
 	return activity, nil
 }
+
+func (r *ActivityRepository) ConfirmActivity(id string) error {
+	query := fmt.Sprintf("UPDATE %s SET was_active='t' WHERE id='%s'", activityTable, id)
+
+	_, err := r.db.Exec(query)
+
+	return err
+}
