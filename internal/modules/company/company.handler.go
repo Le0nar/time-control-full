@@ -71,4 +71,8 @@ func (h *CompanyHandler) IdentityCompany(c *gin.Context) {
 	}
 	
 	c.Set(companyCtx, companyId)
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"token": token,
+	})
 }
