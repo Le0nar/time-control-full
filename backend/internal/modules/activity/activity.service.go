@@ -37,7 +37,7 @@ func checkIsFaceRecognized(photo os.File) bool {
 }
 
 func (as *ActivityService)  AddWorkTime (employeeId int) error {
-	return as.activityRepository.AddWorkTime(employeeId)
+	return as.activityRepository.AddWorkTime(employeeId, checkDuration)
 }
 
 func (as *ActivityService) ConfirmActivity(id string) error {
