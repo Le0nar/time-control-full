@@ -14,15 +14,16 @@ func NewActiviySerivce(activityRepository ActivityRepository) *ActivityService {
 	return &ActivityService{activityRepository: activityRepository}
 }
 
-func (s* ActivityService) CreateActivity(createActivityDto CreateActivityDto) (Activity, error) {
-	// checked time
-	const checkDuration = int64(time.Minute * 3)
+// checked time
+const checkDuration = int64(time.Minute * 3)
+
+func (as* ActivityService) CreateActivity(createActivityDto CreateActivityDto) (Activity, error) {
 	hasInteractions := checkHasInteractions(createActivityDto.InactivityTime, checkDuration)
 	isFaceRecognized := checkIsFaceRecognized(createActivityDto.Photo)
 
 	wasEmployeeActive := isFaceRecognized && hasInteractions
 
-	return s.activityRepository.CreateActivity(createActivityDto.EmployeeId, wasEmployeeActive, checkDuration)
+	return as.activityRepository.CreateActivity(createActivityDto.EmployeeId, wasEmployeeActive, checkDuration)
 }
 
 func checkHasInteractions(inactivityTime, checkDuration int64) bool {
@@ -35,6 +36,10 @@ func checkIsFaceRecognized(photo os.File) bool {
     return rand.Intn(2) == 1
 }
 
-func (s *ActivityService) ConfirmActivity(id string) error {
-	return s.activityRepository.ConfirmActivity(id)
+func (as *ActivityService)  AddWorkTime (employeeId int) error {
+	return as.activityRepository.AddWorkTime(employeeId)
+}
+
+func (as *ActivityService) ConfirmActivity(id string) error {
+	return as.activityRepository.ConfirmActivity(id, checkDuration)
 }

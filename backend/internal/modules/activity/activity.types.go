@@ -18,3 +18,10 @@ type CreateActivityDto struct {
 	InactivityTime int64 `json:"inactivityTime" binding:"required"`
 	EmployeeId int `json:"employeeId" binding:"required"`
 }
+
+// TODO: mb rename
+type YearActivity struct {
+	Id    int    `json:"id" db:"id" `
+	EmployeeId int `json:"employeeId" db:"employee_id"`
+	Year    int    `json:"year" db:"year" `
+}

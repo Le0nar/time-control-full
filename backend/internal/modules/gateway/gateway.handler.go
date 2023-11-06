@@ -3,7 +3,6 @@ package gateway
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -34,6 +33,11 @@ func (gh *GatewayHandler) IdentityEmployee(c *gin.Context) {
    
 	var jsonStr = []byte(``)
     req, err := http.NewRequest(http.MethodPost, validateUrl, bytes.NewBuffer(jsonStr))
+	if err != nil {
+		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
     req.Header.Set(authorizationHeader, token)
     req.Header.Set("Content-Type", "application/json")
 
@@ -44,10 +48,7 @@ func (gh *GatewayHandler) IdentityEmployee(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("response Status:", res.Status)
-    fmt.Println("response Headers:", res.Header)
     body, _ := io.ReadAll(res.Body)
-    fmt.Println("response Body:", string(body))
 
 	if res.StatusCode != http.StatusOK {
 		util.NewErrorResponse(c, http.StatusUnauthorized, string(body))

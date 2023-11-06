@@ -30,12 +30,19 @@ func (h *ActivityHandler) CreateActivity(c *gin.Context) {
 		return
 	}
 
-	if activity.WasActive {
-		c.JSON(http.StatusCreated, "resource created successfully")
+	// Send activity to client if user was unactive
+	if !activity.WasActive {
+		c.JSON(http.StatusOK, activity)
 		return
 	}
 
-	c.JSON(http.StatusOK, activity)
+	err = h.activityService.AddWorkTime(activity.EmployeeId)
+	if err != nil {
+		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusCreated, "resource created successfully")
 }
 
 func (h *ActivityHandler) ConfirmActivity(c *gin.Context) {
@@ -52,6 +59,13 @@ func (h *ActivityHandler) ConfirmActivity(c *gin.Context) {
 		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
+
+	// TODO: try to get employeeId from context
+	// err = h.activityService.AddWorkTime(activity.EmployeeId)
+	// if err != nil {
+	// 	util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+	// 	return
+	// }
 
 	c.JSON(http.StatusOK, "resource updated successfully")
 }
