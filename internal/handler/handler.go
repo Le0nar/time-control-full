@@ -22,11 +22,16 @@ func NewHandler(service *service.Service) *Handler {
 func (h *Handler) InitRouter() *gin.Engine {
 	router := gin.Default()
 	
-	readService := router.Group("/read-service", h.GatewayHandler.IdentityEmployee)
+	readService := router.Group("/read-service")
 	{
-		readService.GET("/employee/:id/activity", h.ActivityHandler.GetEmployeeMonthActivity)
-
-		// TODO: add GetCompanyEmployeeActivity rout
+		employeeGroup := readService.Group("/employee", h.GatewayHandler.IdentityEmployee)
+		{
+			employeeGroup.GET("/:id/activity", h.ActivityHandler.GetEmployeeMonthActivity)
+			// TODO: create handler
+			// employeeGroup.POST("/employee/:id/activity", h.ActivityHandler.GetEmployeeMonthActivity)
+		}
+		
+		// TODO: add group for company
 	}
 	
 	return router

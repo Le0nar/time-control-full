@@ -9,10 +9,5 @@ type DayActivity struct {
 
 type DayActivityDto struct {
 	Day          int   `json:"day"`
-	ActivityTime int64 `json:"activityTime"`
-}
-
-type MonthActivityDto struct {
-	Month int              `json:"month"`
-	Days  []DayActivityDto `json:"days"`
+	ActivityTime int64 `json:"activityTime" db:"activity_time"`
 }

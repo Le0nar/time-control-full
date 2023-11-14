@@ -2,10 +2,7 @@ module github.com/le0nar/time-control-read
 
 go 1.21.0
 
-require (
-	github.com/gin-gonic/gin v1.9.1
-	github.com/google/uuid v1.3.1
-)
+require github.com/gin-gonic/gin v1.9.1
 
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect

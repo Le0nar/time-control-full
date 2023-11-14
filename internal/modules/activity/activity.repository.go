@@ -1,6 +1,8 @@
 package activity
 
 import (
+	"fmt"
+
 	"github.com/jmoiron/sqlx"
 )
 
@@ -12,7 +14,12 @@ func NewActivityRepository(db *sqlx.DB) *ActivityRepository {
 	return &ActivityRepository{db: db}
 }
 
-const dayActivityTable = "activity"
+const (
+	dayActivityTable = "day_activity"
+	employeeIdColumn = "employee_id"
+	activityDateColumn = "activity_date"
+	activityTimeColumn = "activity_time"
+)
 
 func (ar *ActivityRepository) AddWorkTime(employeeId int, checkDuration int64) error {
 	// year, month, day := time.Now().Date()
@@ -103,20 +110,26 @@ func (ar *ActivityRepository) AddWorkTime(employeeId int, checkDuration int64) e
 	return nil
 }
 
-func (ar *ActivityRepository) GetEmployeeMonthActivity(employeeId, year, month int) (MonthActivityDto, error) {
-	var yearActivity YearActivity
+func (ar *ActivityRepository) GetEmployeeMonthActivity(employeeId, year, month int) ([]DayActivityDto, error) {
+	var dayActivityDtoList  []DayActivityDto
 
-	// get and return MonthActivityDto
+	query := fmt.Sprintf(
+		"SELECT EXTRACT(DAY FROM %s) as day, %s from %s WHERE %s = $1 AND EXTRACT(MONTH FROM %s) = $2 AND EXTRACT(YEAR FROM %s) = $3 ORDER BY day;",
+		activityDateColumn,
+		activityTimeColumn,
+		dayActivityTable,
+		employeeIdColumn,
+		activityDateColumn,
+		activityDateColumn,
+	)
+
+	err := ar.db.Select(
+		&dayActivityDtoList,
+		query,
+		employeeId,
+		month,
+		year,
+	)
+
+	return dayActivityDtoList, err
 }
-
-// var newsList []news.News
-// query := fmt.Sprintf("SELECT * FROM %s", newsTable)
-// err := r.db.Select(&newsList, query)
-
-// return newsList, err
-
-// var newsItem news.News
-// query := fmt.Sprintf("SELECT * FROM %s where id = %d", newsTable, newsId)
-// err := r.db.Get(&newsItem, query)
-
-// return newsItem, err
