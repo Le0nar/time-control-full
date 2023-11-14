@@ -5,7 +5,7 @@
 
     - Pull docker image of postgres docker pull postgres
 
-    - Run container docker run --name=news-db -e POSTGRES_PASSWORD='qwerty' -p 5436:5432 -d postgres
+    - Run container docker run --name=db_name -e POSTGRES_PASSWORD='qwerty' -p 5434:5432 -d postgres
 
 3) Enter "go run cmd/main.go" to command line
 
