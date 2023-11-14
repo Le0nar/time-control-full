@@ -5,7 +5,9 @@
 
     - Pull docker image of postgres docker pull postgres
 
-    - Run container docker run --name=news-db -e POSTGRES_PASSWORD='qwerty' -p 5436:5432 -d postgres
+    - Run container docker run --name=name_db -e POSTGRES_PASSWORD='qwerty' -p 5435:5432 -d postgres
+
+    - Install extension for uuid. Run in db cli: CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 3) Enter "go run cmd/main.go" to command line
 

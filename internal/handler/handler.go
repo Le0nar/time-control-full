@@ -25,7 +25,7 @@ func (h *Handler) InitRouter() *gin.Engine {
 	writeService := router.Group("/write-service", h.GatewayHandler.IdentityEmployee)  
 	{
 		writeService.POST("/activity", h.ActivityHandler.CreateActivity)
-		writeService.PATCH("/activity/:id", h.ActivityHandler.ConfirmActivity)
+		// writeService.PATCH("/activity/:id", h.ActivityHandler.ConfirmActivity)
 	}
 
 	return router

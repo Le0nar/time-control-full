@@ -16,7 +16,8 @@ func NewActivityHandler(activityService ActivityService) *ActivityHandler {
 	return &ActivityHandler{activityService: activityService}
 }
 
-func (h *ActivityHandler) CreateActivity(c *gin.Context) {
+// TODO: rename
+func (ah *ActivityHandler) CreateActivity(c *gin.Context) {
 	var createActivityDto CreateActivityDto
 
 	if err := c.BindJSON(&createActivityDto); err != nil {
@@ -24,7 +25,7 @@ func (h *ActivityHandler) CreateActivity(c *gin.Context) {
 		return
 	}
 
-	activity, err := h.activityService.CreateActivity(createActivityDto)
+	activity, err := ah.activityService.CreateActivity(createActivityDto)
 	if err != nil {
 		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -36,16 +37,18 @@ func (h *ActivityHandler) CreateActivity(c *gin.Context) {
 		return
 	}
 
-	err = h.activityService.AddWorkTime(activity.EmployeeId)
-	if err != nil {
-		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
+	// TODO: call http method from read service
+	// Eventual Consistancy
+	// err = ah.activityService.AddWorkTime(activity.EmployeeId)
+	// if err != nil {
+	// 	util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+	// 	return
+	// }
 
 	c.JSON(http.StatusCreated, "resource created successfully")
 }
 
-func (h *ActivityHandler) ConfirmActivity(c *gin.Context) {
+func (ah *ActivityHandler) ConfirmActivity(c *gin.Context) {
 	id := c.Param("id")
 
 	_, err := uuid.Parse(id)
@@ -54,14 +57,16 @@ func (h *ActivityHandler) ConfirmActivity(c *gin.Context) {
 		return
 	}
 
-	err = h.activityService.ConfirmActivity((id))
+	// TODO: create new event instead of update
+	err = ah.activityService.ConfirmActivity((id))
 	if err != nil {
 		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	// TODO: try to get employeeId from context
-	// err = h.activityService.AddWorkTime(activity.EmployeeId)
+	// TODO: move to read-service
+	// TODO: get employeeId from request
+	// err = ah.activityService.AddWorkTime(activity.EmployeeId)
 	// if err != nil {
 	// 	util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 	// 	return

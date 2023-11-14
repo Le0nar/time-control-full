@@ -36,10 +36,6 @@ func checkIsFaceRecognized(photo os.File) bool {
     return rand.Intn(2) == 1
 }
 
-func (as *ActivityService)  AddWorkTime (employeeId int) error {
-	return as.activityRepository.AddWorkTime(employeeId, checkDuration)
-}
-
 func (as *ActivityService) ConfirmActivity(id string) error {
 	return as.activityRepository.ConfirmActivity(id, checkDuration)
 }
