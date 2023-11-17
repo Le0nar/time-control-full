@@ -1,3 +1,19 @@
+### Architecture ###
+
+Backend part of time-control consists of 3 parts (repositories):
+1) time-control (write service, core)
+
+    https://github.com/Le0nar/time-control
+
+2) time-control-auth 
+
+    https://github.com/Le0nar/time-control-auth
+
+3) time-control-read
+
+    https://github.com/Le0nar/time-control-read
+
+
 ### Start ###
 1) For run app create a ".env" file with content like in the ".example.env" file.
 
