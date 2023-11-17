@@ -22,21 +22,21 @@ const (
 	confirmingActivityEventId = 2
 )
 
-func (as* ActivityService) CreateCheckingActivityEvent(checkingActivityDto CheckingActivityDto) (ActivityEvent, error) {
+func (as *ActivityService) CreateCheckingActivityEvent(checkingActivityDto CheckingActivityDto) (ActivityEvent, error) {
 	hasInteractions := checkHasInteractions(checkingActivityDto.InactivityTime, checkDuration)
 	isFaceRecognized := checkIsFaceRecognized(checkingActivityDto.Photo)
 
 	wasEmployeeActive := isFaceRecognized && hasInteractions
 
-	var chekingActivityEvent ActivityEventDto
+	var chekingActivityEventDto ActivityEventDto
 
-	chekingActivityEvent.CheckDuration = checkDuration
-	chekingActivityEvent.CheckTime = time.Now()
-	chekingActivityEvent.EmployeeId = checkingActivityDto.EmployeeId
-	chekingActivityEvent.EventTypeId = checkingActivityEventId
-	chekingActivityEvent.WasActive = wasEmployeeActive
+	chekingActivityEventDto.CheckDuration = checkDuration
+	chekingActivityEventDto.CheckTime = time.Now()
+	chekingActivityEventDto.EmployeeId = checkingActivityDto.EmployeeId
+	chekingActivityEventDto.EventTypeId = checkingActivityEventId
+	chekingActivityEventDto.WasActive = wasEmployeeActive
 
-	return as.activityRepository.CreateActivityEvent(chekingActivityEvent)
+	return as.activityRepository.CreateActivityEvent(chekingActivityEventDto)
 }
 
 func checkHasInteractions(inactivityTime, checkDuration int64) bool {
@@ -47,4 +47,16 @@ func checkHasInteractions(inactivityTime, checkDuration int64) bool {
 // TODO: implements logic
 func checkIsFaceRecognized(photo os.File) bool {
     return rand.Intn(2) == 1
+}
+
+func (as *ActivityService) CreateConfirmingActivityEvent(confirmingActivityDto ConfirmingActivityDto) (ActivityEvent,error) {
+	var activityEventDto ActivityEventDto
+	
+	activityEventDto.CheckDuration = confirmingActivityDto.CheckDuration
+	activityEventDto.CheckTime = confirmingActivityDto.CheckTime
+	activityEventDto.EmployeeId = confirmingActivityDto.EmployeeId
+	activityEventDto.EventTypeId = confirmingActivityEventId
+	activityEventDto.WasActive = true
+
+	return as.activityRepository.CreateActivityEvent(activityEventDto)
 }
