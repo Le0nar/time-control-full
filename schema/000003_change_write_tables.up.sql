@@ -19,5 +19,5 @@ CREATE TABLE activity_event
     check_duration bigint not null,
     check_time timestamp not null,
     was_active boolean not null,
-    event_type int references activity_event_type (id) on delete cascade not null
+    event_type_id int references activity_event_type (id) on delete cascade not null
 );

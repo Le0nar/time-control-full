@@ -28,3 +28,7 @@ CREATE TABLE activity
     employee_id int  not null,
     check_time timestamp not null
 );
+
+DROP TABLE activity_event_type;
+
+DROP TABLE activity_event;

@@ -2,9 +2,7 @@ package activity
 
 import (
 	"fmt"
-	"time"
 
-	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -16,37 +14,29 @@ func NewActivityRepository(db *sqlx.DB) *ActivityRepository {
 	return &ActivityRepository{db: db}
 }
 
-// TODO: rename "year" to "year_activity" (for "month" and "day" do the same)
-// TODO: add references to db values
 const (
-	activityTable = "activity"
-	yearTable = "year"
-	monthTable = "month"
-	dayTable = "day"
+	activityEventTablet = "activity_event"
 )
 
-func (ar *ActivityRepository) CreateActivity(employeeId int, wasActive bool, checkDuration int64) (Activity, error) {
-	var activity Activity
+func (ar *ActivityRepository) CreateActivityEvent(activityEvent ActivityEvent) error {
+// 2) в хендлере вызвать метод add work from read service
+// 3) create another endpoint for write-serivce without checking (when user clicked "i'm here")
 
 	query := fmt.Sprintf(
-		"INSERT INTO %s (id, was_active, check_duration, employee_id, check_time) values ($1, $2, $3, $4, $5) RETURNING  id, was_active, employee_id",
-		activityTable,
+		"INSERT INTO %s (employee_id, check_duration, check_time, was_active, event_type_id) values ($1, $2, $3, $4, $5) RETURNING was_active",
+		activityEventTablet,
 	)
 
-	row := ar.db.QueryRow(query, uuid.New(), wasActive, checkDuration, employeeId, time.Now())
+	row := ar.db.QueryRow(
+		query,
+		activityEvent.EmployeeId,
+		activityEvent.CheckDuration,
+		activityEvent.CheckTime,
+		activityEvent.WasActive,
+		activityEvent.EventTypeId,
+	)
 
-	err := row.Scan(&activity.Id, &activity.WasActive, &activity.EmployeeId)
-	if err != nil {
-		return activity, err
-	}
-
-	return activity, nil
-}
-
-func (ar *ActivityRepository) ConfirmActivity(id string, checkDuration int64) error {
-	query := fmt.Sprintf("UPDATE %s SET was_active='t' WHERE id='%s'", activityTable, id)
-
-	_, err := ar.db.Exec(query)
+	err := row.Err()
 
 	return err
 }

@@ -14,16 +14,32 @@ func NewActiviySerivce(activityRepository ActivityRepository) *ActivityService {
 	return &ActivityService{activityRepository: activityRepository}
 }
 
-// checked time
-const checkDuration = int64(time.Minute * 3)
+const (
+	// checked time
+	checkDuration = int64(time.Minute * 3)
+	// Event IDs
+	checkingActivityEventId = 1
+	confirmingActivityEventId = 2
+)
 
-func (as* ActivityService) CreateActivity(createActivityDto CreateActivityDto) (Activity, error) {
-	hasInteractions := checkHasInteractions(createActivityDto.InactivityTime, checkDuration)
-	isFaceRecognized := checkIsFaceRecognized(createActivityDto.Photo)
+//  handle first type of event
+func (as* ActivityService) CreateActivityEvent(checkingActivityDto CheckingActivityDto) (bool, error) {
+	hasInteractions := checkHasInteractions(checkingActivityDto.InactivityTime, checkDuration)
+	isFaceRecognized := checkIsFaceRecognized(checkingActivityDto.Photo)
 
 	wasEmployeeActive := isFaceRecognized && hasInteractions
 
-	return as.activityRepository.CreateActivity(createActivityDto.EmployeeId, wasEmployeeActive, checkDuration)
+	var chekingActivityEvent ActivityEvent
+
+	chekingActivityEvent.CheckDuration = checkDuration
+	chekingActivityEvent.CheckTime = time.Now()
+	chekingActivityEvent.EmployeeId = checkingActivityDto.EmployeeId
+	chekingActivityEvent.EventTypeId = checkingActivityEventId
+	chekingActivityEvent.WasActive = wasEmployeeActive
+
+	err := as.activityRepository.CreateActivityEvent(chekingActivityEvent)
+
+	return chekingActivityEvent.WasActive, err
 }
 
 func checkHasInteractions(inactivityTime, checkDuration int64) bool {
@@ -36,6 +52,3 @@ func checkIsFaceRecognized(photo os.File) bool {
     return rand.Intn(2) == 1
 }
 
-func (as *ActivityService) ConfirmActivity(id string) error {
-	return as.activityRepository.ConfirmActivity(id, checkDuration)
-}

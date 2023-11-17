@@ -9,7 +9,11 @@
 
     - Install extension for uuid. Run in db cli: CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-3) Enter "go run cmd/main.go" to command line
+3) Create 2 elements in "activity_event_type" table.
+    - INSERT INTO activity_event_type (event_type) values ('check_activity');
+    - INSERT INTO activity_event_type (event_type) values ('confirm_activity');
+
+4) Enter "go run cmd/main.go" to command line
 
 ### File structure ###
 
