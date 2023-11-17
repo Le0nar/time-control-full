@@ -22,14 +22,13 @@ const (
 	confirmingActivityEventId = 2
 )
 
-//  handle first type of event
-func (as* ActivityService) CreateActivityEvent(checkingActivityDto CheckingActivityDto) (bool, error) {
+func (as* ActivityService) CreateCheckingActivityEvent(checkingActivityDto CheckingActivityDto) (ActivityEvent, error) {
 	hasInteractions := checkHasInteractions(checkingActivityDto.InactivityTime, checkDuration)
 	isFaceRecognized := checkIsFaceRecognized(checkingActivityDto.Photo)
 
 	wasEmployeeActive := isFaceRecognized && hasInteractions
 
-	var chekingActivityEvent ActivityEvent
+	var chekingActivityEvent ActivityEventDto
 
 	chekingActivityEvent.CheckDuration = checkDuration
 	chekingActivityEvent.CheckTime = time.Now()
@@ -37,9 +36,7 @@ func (as* ActivityService) CreateActivityEvent(checkingActivityDto CheckingActiv
 	chekingActivityEvent.EventTypeId = checkingActivityEventId
 	chekingActivityEvent.WasActive = wasEmployeeActive
 
-	err := as.activityRepository.CreateActivityEvent(chekingActivityEvent)
-
-	return chekingActivityEvent.WasActive, err
+	return as.activityRepository.CreateActivityEvent(chekingActivityEvent)
 }
 
 func checkHasInteractions(inactivityTime, checkDuration int64) bool {
@@ -51,4 +48,3 @@ func checkHasInteractions(inactivityTime, checkDuration int64) bool {
 func checkIsFaceRecognized(photo os.File) bool {
     return rand.Intn(2) == 1
 }
-

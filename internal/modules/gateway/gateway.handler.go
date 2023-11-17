@@ -2,10 +2,8 @@ package gateway
 
 import (
 	"bytes"
-	"errors"
 	"io"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/le0nar/time-control/internal/util"
@@ -25,7 +23,7 @@ const (
 
 func (gh *GatewayHandler) IdentityEmployee(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
-	token, err := getTokenFromHeader(header)
+	token, err := util.GetTokenFromHeader(header)
 	if err != nil {
 		util.NewErrorResponse(c, http.StatusUnauthorized, err.Error())
 		return
@@ -54,19 +52,4 @@ func (gh *GatewayHandler) IdentityEmployee(c *gin.Context) {
 		util.NewErrorResponse(c, http.StatusUnauthorized, string(body))
 		return
 	}
-}
-
-func  getTokenFromHeader(header string) (string, error) {
-	if header == "" {
-		return "", errors.New("empty auth header")
-	}
-
-	headerParts := strings.Split(header, " ")
-	if len(headerParts) != 2 {
-		return "", errors.New("invalid auth header")
-	}
-
-	token := headerParts[1]
-
-	return token, nil
 }

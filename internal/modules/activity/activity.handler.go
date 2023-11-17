@@ -1,6 +1,9 @@
 package activity
 
 import (
+	"bytes"
+	"encoding/json"
+	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +18,12 @@ func NewActivityHandler(activityService ActivityService) *ActivityHandler {
 	return &ActivityHandler{activityService: activityService}
 }
 
+const (
+	authorizationHeader = "Authorization"
+	addingWorkTimeUrl = "http://localhost:8002/read-service/employee/activity"
+	YYYYMMDD = "2006-01-02"
+)
+
 // TODO: rename
 func (ah *ActivityHandler) CheckActivity(c *gin.Context) {
 	var checkingActivityDto CheckingActivityDto
@@ -26,25 +35,63 @@ func (ah *ActivityHandler) CheckActivity(c *gin.Context) {
 
 	// TODO: add check is photo exist
 
-	wasEmployeeActive, err := ah.activityService.CreateActivityEvent(checkingActivityDto)
+	activityEvent, err := ah.activityService.CreateCheckingActivityEvent(checkingActivityDto)
 	if err != nil {
 		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	// Save active time in read service
-	// if wasEmployeeActive {
-		// TODO: call http method from read service
-		// Eventual Consistancy
-		// err = ah.activityService.AddWorkTime(activityEvent.EmployeeId)
-		// if err != nil {
-		// 	util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
-		// 	return
-		// }
-	// }
+	// TODO: mb move to function and reuse in antoher event
+	// Save active time in read service (implementation of Eventual Consistancy)
+	if activityEvent.WasActive {
+		var addingWorkingTimeDto AddingWorkingTimeDto
+
+		// change format from time.Time to yyyy-mm-dd 
+		addingWorkingTimeDto.ActivityDate = activityEvent.CheckTime.Format(YYYYMMDD)
+		addingWorkingTimeDto.EmployeeId = activityEvent.EmployeeId
+		addingWorkingTimeDto.ActivityTime = activityEvent.CheckDuration
+
+
+		jsonStr, err := json.Marshal(addingWorkingTimeDto)
+		if err != nil {
+			util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		req, err := http.NewRequest(http.MethodPost, addingWorkTimeUrl, bytes.NewBuffer(jsonStr))
+		if err != nil {
+			util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+			return
+		}
+		
+		header := c.GetHeader(authorizationHeader)
+		tokenValue, err := util.GetTokenFromHeader(header)
+		if err != nil {
+			util.NewErrorResponse(c, http.StatusUnauthorized, err.Error())
+			return
+		}
+
+		token := "Bearer " + tokenValue
+
+		req.Header.Set(authorizationHeader, token)
+
+		client := &http.Client{}
+		res, err := client.Do(req)
+		if err != nil {
+			util.NewErrorResponse(c, http.StatusUnauthorized, err.Error())
+			return
+		}
+	
+		body, _ := io.ReadAll(res.Body)
+	
+		if res.StatusCode != http.StatusOK {
+			util.NewErrorResponse(c, http.StatusUnauthorized, string(body))
+			return
+		}
+	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"wasActive": wasEmployeeActive,
+		"wasActive": activityEvent.WasActive,
 	})
 }
 
