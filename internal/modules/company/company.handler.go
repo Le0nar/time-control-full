@@ -57,11 +57,10 @@ const (
 )
 
 func (h *CompanyHandler) IdentityCompany(c *gin.Context) {
-	header := c.GetHeader(authorizationHeader)
-	token, err := util.GetTokenFromHeader(header)
-	if err != nil {
-		util.NewErrorResponse(c, http.StatusUnauthorized, err.Error())
-		return
+	token := c.GetHeader(authorizationHeader)
+
+	if token == "" {
+		util.NewErrorResponse(c, http.StatusUnauthorized, "empty auth header")
 	}
 
 	companyId, err := h.companyService.GetCompanyId(token) 
@@ -70,8 +69,9 @@ func (h *CompanyHandler) IdentityCompany(c *gin.Context) {
 		return
 	}
 	
+	// TODO: does it stil need?
 	c.Set(companyCtx, companyId)
-
+	
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"token": token,
 	})

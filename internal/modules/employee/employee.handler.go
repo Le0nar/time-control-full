@@ -1,7 +1,6 @@
 package employee
 
 import (
-	"fmt"
 	"net/http"
 
 	"time-control-auth/internal/util"
@@ -60,9 +59,6 @@ const (
 
 func (h *EmployeeHandler) IdentityEmployee(c *gin.Context) {
 	token := c.GetHeader(authorizationHeader)
-
-	fmt.Println("token:", token)
-	// TODO: header is here
 
 	if token == "" {
 		util.NewErrorResponse(c, http.StatusUnauthorized, "empty auth header")

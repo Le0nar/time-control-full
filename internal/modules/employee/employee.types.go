@@ -1,6 +1,7 @@
 package employee
 
 type Employee struct {
+	// TODO: add password here
 	Id         int    `json:"id" db:"id"`
 	Email      string `json:"email" binding:"required"`
 	FirstName  string `json:"firstName" db:"first_name" binding:"required"`

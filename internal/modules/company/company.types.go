@@ -1,6 +1,7 @@
 package company
 
 type Company struct {
+	// TODO: add password here
 	Id    int    `json:"id" db:"id"`
 	Email string `json:"email" binding:"required"`
 	Name  string `json:"name" binding:"required"`
