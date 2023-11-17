@@ -56,5 +56,19 @@ func (ah *ActivityHandler) GetEmployeeMonthActivity(c *gin.Context) {
 	c.JSON(http.StatusOK, monthActivityDto)
 }
 
+func (ah *ActivityHandler) AddWorkTime(c *gin.Context) {
+	var addingWorkingTimeDto AddingWorkingTimeDto
 
-// TODO: add work time endpoint
+	if err := c.BindJSON(&addingWorkingTimeDto); err != nil {
+		util.NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err := ah.activityService.AddWorkTime(addingWorkingTimeDto)
+	if err != nil {
+		util.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, "resource created or updated successfully")
+}

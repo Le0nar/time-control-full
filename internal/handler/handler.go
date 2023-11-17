@@ -27,11 +27,10 @@ func (h *Handler) InitRouter() *gin.Engine {
 		employeeGroup := readService.Group("/employee", h.GatewayHandler.IdentityEmployee)
 		{
 			employeeGroup.GET("/:id/activity", h.ActivityHandler.GetEmployeeMonthActivity)
-			// TODO: create handler
-			// employeeGroup.POST("/employee/:id/activity", h.ActivityHandler.GetEmployeeMonthActivity)
+			employeeGroup.POST("/activity", h.ActivityHandler.AddWorkTime)
 		}
 		
-		// TODO: add group for company
+		// TODO: add group for company (get moonthly activity of employees)
 	}
 	
 	return router
