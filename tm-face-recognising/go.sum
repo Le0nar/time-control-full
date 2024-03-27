@@ -1,2 +1,4 @@
+github.com/Kagami/go-face v0.0.0-20210630145111-0c14797b4d0e h1:lqIUFzxaqyYqUn4MhzAvSAh4wIte/iLNcIEWxpT/qbc=
+github.com/Kagami/go-face v0.0.0-20210630145111-0c14797b4d0e/go.mod h1:9wdDJkRgo3SGTcFwbQ7elVIQhIr2bbBjecuY7VoqmPU=
 github.com/go-chi/chi v1.5.5 h1:vOB/HbEMt9QqBqErz07QehcOKHaWFtuj87tTDVz2qXE=
 github.com/go-chi/chi v1.5.5/go.mod h1:C9JqLr3tIYjDOZpzn+BCuxY8z8vmca43EeMgyZt7irw=
