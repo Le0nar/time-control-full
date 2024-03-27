@@ -2,6 +2,7 @@ package service
 
 import (
 	"log"
+	"os"
 
 	"github.com/Kagami/go-face"
 )
@@ -31,7 +32,10 @@ func (s *Serivce) RecogniseFace(path string) bool  {
 
 	hasFace := len(faces) > 0
 
-// TODO: defer delete file
+	err = os.Remove(path)
+    if err != nil { 
+        log.Fatal(err) 
+    } 
 
 	return hasFace
 }
