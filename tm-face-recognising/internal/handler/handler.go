@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -12,7 +11,7 @@ import (
 )
 
 type service interface {
-	RecogniseFace(file http.File) bool
+	RecogniseFace(path string) bool
 }
 
 type Handler struct {
@@ -33,20 +32,29 @@ func (h *Handler) RecogniseFace(w http.ResponseWriter, r *http.Request) {
     }
     defer file.Close()
 
-    // TODO: create folder for save images
+    const tempImagesDir = "_temp-images"
 
-    dst, err := os.Create(header.Filename)
+    if _, err := os.Stat(tempImagesDir); os.IsNotExist(err) {
+        err := os.Mkdir(tempImagesDir, os.ModePerm)
+        if err != nil{
+            log.Fatal(err)
+        }
+    }
+
+    pathToTempFile := tempImagesDir+ "/" + header.Filename
+
+    createdFile, err := os.Create(pathToTempFile)
     if err != nil {
         log.Println("error creating file", err)
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
-    defer dst.Close()
-    if _, err := io.Copy(dst, file); err != nil {
+    defer createdFile.Close()
+    
+    if _, err := io.Copy(createdFile, file); err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
-    fmt.Fprintf(w, "uploaded file")
 }
 
 // Initialization of router

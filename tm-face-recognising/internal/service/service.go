@@ -1,13 +1,11 @@
 package service
 
-import "net/http"
-
 type Serivce struct {}
 
 func NewService() *Serivce {
 	return &Serivce{}
 }
 
-func (s *Serivce) RecogniseFace(file http.File) bool  {
+func (s *Serivce) RecogniseFace(path string) bool  {
 	return false
 }
