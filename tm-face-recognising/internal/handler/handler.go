@@ -1,10 +1,12 @@
 package handler
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -55,6 +57,10 @@ func (h *Handler) RecogniseFace(w http.ResponseWriter, r *http.Request) {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
+
+    isFaceRecognised := h.service.RecogniseFace(pathToTempFile)
+
+    fmt.Fprint(w, strconv.FormatBool(isFaceRecognised))
 }
 
 // Initialization of router
