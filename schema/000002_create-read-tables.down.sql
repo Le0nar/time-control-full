@@ -1,0 +1,5 @@
+DROP TABLE year;
+
+DROP TABLE month;
+
+DROP TABLE day;
