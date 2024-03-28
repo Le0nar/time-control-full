@@ -1,4 +1,4 @@
-module github.com/Le0nar/time-control-full/tm-face-recognising
+module github.com/Le0nar/time-control-full/tc-face-recognising
 
 go 1.22.1
 
