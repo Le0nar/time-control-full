@@ -21,7 +21,7 @@ Backend part of time-control consists of 3 parts (repositories):
 
     - Pull docker image of postgres docker pull postgres
 
-    - Run container docker run --name=db_name -e POSTGRES_PASSWORD='qwerty' -p 5436:5432 -d postgres
+    - Run container docker run --name=tc_auth -e POSTGRES_PASSWORD='qwerty' -p 5436:5432 -d postgres
 
 3) Enter "go run cmd/main.go" to command line
 
