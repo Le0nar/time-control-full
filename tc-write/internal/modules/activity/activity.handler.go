@@ -3,6 +3,7 @@ package activity
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -28,6 +29,7 @@ func (ah *ActivityHandler) CheckActivity(c *gin.Context) {
 	var checkingActivityDto CheckingActivityDto
 
 	if err := c.BindJSON(&checkingActivityDto); err != nil {
+		fmt.Printf("checkingActivityDto: %v\n", checkingActivityDto)
 		util.NewErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
