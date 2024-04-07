@@ -6,7 +6,11 @@ For first starting:
     1.2 docker run --name=tc-read -e POSTGRES_PASSWORD='qwerty' -p 5434:5432 -d postgres
     1.3 docker run --name=tc-write -e POSTGRES_PASSWORD='qwerty' -p 5435:5432 -d postgres
 
-2. Run all services
+2. Apply migrations for databases. Look detailed info in service's README.md
+
+3. Add .env file for some services. Look detailed info in service's README.md
+
+4. Run all services
     2.1 tc-auth
     2.1.1 cd tc-auth
     2.2.2 go run cmd/main.go
@@ -22,6 +26,8 @@ For first starting:
     2.4 tc-face-recognising
     2.4.1 cd tc-face-recognising
     2.4.2 go run main.go
+
+
 
 For next starting:
 1. Run existing containers
