@@ -1,19 +1,3 @@
-### Architecture ###
-
-Backend part of time-control consists of 3 parts (repositories):
-1) time-control (write service, core)
-
-    https://github.com/Le0nar/time-control
-
-2) time-control-auth 
-
-    https://github.com/Le0nar/time-control-auth
-
-3) time-control-read
-
-    https://github.com/Le0nar/time-control-read
-
-
 ### Start ###
 1) For run app create a ".env" file with content like in the ".example.env" file.
 
@@ -22,6 +6,9 @@ Backend part of time-control consists of 3 parts (repositories):
     - Pull docker image of postgres docker pull postgres
 
     - Run container docker run --name=tc-read -e POSTGRES_PASSWORD='qwerty' -p 5434:5432 -d postgres
+
+2.1) Aplpy migrations (for first run)
+    - migrate -path ./schema -database 'postgres://postgres:qwerty@localhost:5434/postgres?sslmode=disable' up
 
 3) Enter "go run cmd/main.go" to command line
 

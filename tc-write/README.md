@@ -1,19 +1,3 @@
-### Architecture ###
-
-Backend part of time-control consists of 3 parts (repositories):
-1) time-control (write service, core)
-
-    https://github.com/Le0nar/time-control
-
-2) time-control-auth 
-
-    https://github.com/Le0nar/time-control-auth
-
-3) time-control-read
-
-    https://github.com/Le0nar/time-control-read
-
-
 ### Start ###
 1) For run app create a ".env" file with content like in the ".example.env" file.
 
@@ -24,6 +8,12 @@ Backend part of time-control consists of 3 parts (repositories):
     - Run container docker run --name=tc-write -e POSTGRES_PASSWORD='qwerty' -p 5435:5432 -d postgres
 
     - Install extension for uuid. Run in db cli: CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+2.1) Aplpy migrations (for first run)
+    - migrate -path ./schema -database 'postgres://postgres:qwerty@localhost:5435/postgres?sslmode=disable' up
+
+2.2)    Initialize extension 
+    - CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 3) Create 2 elements in "activity_event_type" table.
     - INSERT INTO activity_event_type (event_type) values ('check_activity');
