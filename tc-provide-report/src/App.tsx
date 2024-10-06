@@ -6,6 +6,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './App.css'
 import { AuthPage } from './pages/auth/Auth.page';
+import { ReportPage } from './pages/report/Report.page';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<AuthPage />} />
-        {/* <Route path="/report" element={<ReportPage />} /> */}
+        <Route path="/report" element={<ReportPage />} />
       </Routes>
     </Router>
     <Toaster />
