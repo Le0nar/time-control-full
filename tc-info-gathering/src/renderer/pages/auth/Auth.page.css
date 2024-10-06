@@ -1,0 +1,11 @@
+.auth-page_credentials {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.auth-page_buttons {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+}
